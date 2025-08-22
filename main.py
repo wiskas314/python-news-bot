@@ -2,14 +2,15 @@ import requests
 import json
 from bs4 import BeautifulSoup
 import re
+import argparse
 
-def get_clothes():
+def get_clothes(pages=5):
     headers = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
     }
 
     news_dict = {}
-    for i in range(1,10):
+    for i in range(pages+1):
         url = "https://www.csoonline.com/security/page/{}/".format(i)
         r = requests.get(url=url, headers=headers)
 
@@ -51,7 +52,12 @@ def get_clothes():
 
 
 def main():
-    get_clothes()
+    parser = argparse.ArgumentParser(description='Парсер новостей')
+    parser.add_argument('pages', type=int, nargs='?', default=9,
+                        help='Количество страниц для парсинга')
+    args = parser.parse_args()
+
+    return get_clothes(args.pages)
 
 if __name__=="__main__":
     main()
