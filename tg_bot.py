@@ -11,7 +11,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.filters.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.storage.memory import MemoryStorage
+
 
 from config import token
 from topic import CATEGORIES
@@ -120,4 +120,5 @@ async def main():
     await dp.start_polling(bot)
 if __name__=='__main__':
     asyncio.run(main())
+
 
