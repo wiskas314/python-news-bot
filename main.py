@@ -4,14 +4,17 @@ from bs4 import BeautifulSoup
 import re
 import argparse
 
-def get_clothes(pages=5):
+def get_clothes(category_slug,pages=5):
+
     headers = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
     }
 
     news_dict = {}
-    for i in range(pages+1):
-        url = "https://www.csoonline.com/security/page/{}/".format(i)
+
+    for i in range(2,pages+1):
+        url = f"https://www.csoonline.com/{category_slug}/page/{i}/"
+
         r = requests.get(url=url, headers=headers)
 
         soup = BeautifulSoup(r.text, "lxml")
@@ -44,20 +47,24 @@ def get_clothes(pages=5):
                 }
             else:
                 continue
-
-        with open("news_dict.json", "w") as file:
+        filename=f"news_{category_slug}.json"
+        with open(filename, "w") as file:
             json.dump(news_dict, file, indent=4, ensure_ascii=False)
 
 
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Парсер новостей')
-    parser.add_argument('pages', type=int, nargs='?', default=9,
-                        help='Количество страниц для парсинга')
+    parser = argparse.ArgumentParser(description='Парсер новостей по категориям')
+    parser.add_argument('category', nargs='?', default='security', help='Категория для парсинга (или "all")')
+    parser.add_argument('pages', type=int, nargs='?', default=3, help='Количество страниц')
+
     args = parser.parse_args()
 
-    return get_clothes(args.pages)
+
+    return get_clothes(args.category, args.pages)
+
 
 if __name__=="__main__":
     main()
+
